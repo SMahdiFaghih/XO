@@ -27,7 +27,7 @@ public class MenuGraphics
     private Group rootLoginMenu = new Group();
     private Scene sceneLoginMenu = new Scene(rootLoginMenu, 400, 400);
     private Group rootMainMenu = new Group();
-    private Scene sceneMainMenu = new Scene(rootMainMenu, 400, 450);
+    private Scene sceneMainMenu = new Scene(rootMainMenu, 400, 450, Color.LIGHTGREEN);
     private Group rootChangeName = new Group();
     private Scene sceneChangeName = new Scene(rootChangeName, 300, 300);
     private Group rootChangeTable = new Group();
@@ -198,11 +198,12 @@ public class MenuGraphics
     {
         rootMainMenu.getChildren().clear();
 
-        Label labelMainMenu = new Label("Welcome to XO");
-        rootMainMenu.getChildren().add(labelMainMenu);
-        labelMainMenu.relocate(50, 0);
-        labelMainMenu.setFont(Font.font(40));
-        labelMainMenu.setTextFill(Color.BLACK);
+        Text textMainMenu = new Text("Welcome to XO");
+        textMainMenu.setFont(Font.font(40));
+        textMainMenu.setFill(Color.BLACK);
+        textMainMenu.layoutXProperty().bind(sceneMainMenu.widthProperty().subtract(textMainMenu.prefWidth(-1)).divide(2));
+        textMainMenu.setY(50);
+        rootMainMenu.getChildren().add(textMainMenu);
 
         setMainMenuText(primaryStage, "Play", 80);
         setMainMenuText(primaryStage, "Set Game Table", 140);
