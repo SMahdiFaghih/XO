@@ -2,9 +2,14 @@ package Graphics;
 
 import Logic.*;
 
+import com.google.gson.Gson;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.json.simple.parser.JSONParser;
 
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -26,7 +31,28 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        mainMenu();
+        convertJSONToPlayers();
+        MenuGraphics menuGraphics = new MenuGraphics();
+        menuGraphics.signUpMenu(primaryStage);
+        primaryStage.setTitle("XO");
+        primaryStage.centerOnScreen();
+        primaryStage.show();
+    }
+
+    private void convertJSONToPlayers() throws Exception
+    {
+        InputStream inputStream = new FileInputStream("SavedAccounts/SavedAccountPath.txt");
+        Scanner scanner = new Scanner(inputStream);
+        while (scanner.hasNext())
+        {
+            String fileName = scanner.nextLine();
+
+            JSONParser jsonParser = new JSONParser();
+            FileReader reader = new FileReader("SavedAccounts/" + fileName + ".json");
+            Object obj = jsonParser.parse(reader);
+            System.out.println(obj);
+            Player.getPlayers().add(new Gson().fromJson(obj.toString(), Player.class));
+        }
     }
 
     public static void mainMenu()
@@ -95,7 +121,7 @@ public class Main extends Application
     {
         ArrayList<Player> players = Player.getPlayers();
         int numOfPlayers = players.size();
-        Player.arrangePlayers();
+        Player.sortPlayers();
         for (int i=0;i < numOfPlayers;i++)
         {
             Player player = players.get(i);

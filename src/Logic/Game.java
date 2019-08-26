@@ -18,7 +18,8 @@ public class Game
 
     public Game(String playerOneName, String playerTwoName)
     {
-        ArrayList<Player> players = Player.getPlayers();
+        //TODO
+        /*ArrayList<Player> players = Player.getPlayers();
         boolean playerOneSet = false;
         boolean playerTwoSet = false;
         for (int i=0;i < players.size();i++)
@@ -46,7 +47,7 @@ public class Game
         this.playerTwo.setTypeOFTaw('O');
         this.playerTurn = this.playerOne;
         this.matchTable.setStartingTable();
-        Game.addGame(this);
+        Game.addGame(this);*/
     }
 
     public static void addGame(Game game)
