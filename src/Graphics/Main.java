@@ -1,4 +1,4 @@
-package Logic;
+package Graphics;
 
 import Logic.*;
 
@@ -16,7 +16,7 @@ public class Main extends Application
     private static Pattern pattern3 = Pattern.compile("set table \\d+\\*\\d+");
     private static Pattern pattern4 = Pattern.compile("\\d+");
 
-    static Scanner scanner = new Scanner(System.in);
+    public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args)
     {
