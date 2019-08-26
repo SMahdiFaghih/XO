@@ -4,41 +4,23 @@ public class MatchTable
 {
     private static int defaultRow = 3;
     private int row = defaultRow;
-    private static int defaultColumn = 5;
+    private static int defaultColumn = 3;
     private int column = defaultColumn;
-    private char[][] table = new char[row][column];
+    private Cell[][] table = new Cell[row][column];
     private int numOfXOsForWin = 3;
     private int numOfTawInTheTable = 0;
     private int[] coordinateOfLastTaw = new int[2];
     private int[] coordinateOfSecondFromTheEndTaw = new int[2];
 
-    public char[][] getTable()
+    public Cell[][] getTable()
     {
         return this.table;
-    }
-
-    public void setStartingTable()
-    {
-        for (int i=0;i < this.getRow();i++)
-        {
-            for (int j=0;j < this.getColumn();j++)
-            {
-                if(j % 2 == 0)
-                {
-                    this.table[i][j] = '_';
-                }
-                else
-                {
-                    this.table[i][j] = '|';
-                }
-            }
-        }
     }
 
     public static void changeDefaultTable(int row, int column)
     {
         MatchTable.defaultRow = row;
-        MatchTable.defaultColumn = 2 * column - 1;
+        MatchTable.defaultColumn = column;
     }
 
     public int getColumn()
@@ -78,7 +60,7 @@ public class MatchTable
     {
         int row = this.coordinateOfLastTaw[0];
         int column = this.coordinateOfLastTaw[1];
-        this.table[row][column] = '_';
+        this.table[row][column] = null;
         this.coordinateOfLastTaw[0] = this.coordinateOfSecondFromTheEndTaw[0];
         this.coordinateOfLastTaw[1] = this.coordinateOfSecondFromTheEndTaw[1];
         this.decreaseNumOfTheTawInTheTable();
@@ -89,16 +71,16 @@ public class MatchTable
         int row = this.getRow();
         int column = this.getColumn();
         char typeOFTaw = player.getTypeOFTaw();
-        if(row > 3 && column > 5)
+        if(row > 3 && column > 3)
         {
             this.numOfXOsForWin = 4;
         }
-        char[][] table = new char[row][(column + 1)/2];
-        for (int i=0;i < row;i++)
+        char[][] table = new char[row][column];
+        for (int i=0; i < row; i++)
         {
-            for (int j=0;j < column;j += 2)
+            for (int j=0;j < column; j++)
             {
-                table[i][j/2] = this.table[i][j];
+                //table[i][j] = this.table[i][j]; //TODO
             }
         }
         return winnerPronounced(table, typeOFTaw);

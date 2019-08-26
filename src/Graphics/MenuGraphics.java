@@ -50,44 +50,44 @@ public class MenuGraphics
         textSignUp.setY(50);
         rootSignUpMenu.getChildren().add(textSignUp);
 
+        Text textInvalidInput = new Text();
+        rootSignUpMenu.getChildren().add(textInvalidInput);
+
         Button buttonSignUp = new Button("Submit");
-        Label labelInvalidInput = new Label();
-        submitButton(buttonSignUp, labelInvalidInput);
+        submitButton(buttonSignUp);
         buttonSignUp.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
             @Override
             public void handle(MouseEvent event)
             {
-                rootSignUpMenu.getChildren().remove(labelInvalidInput);
                 String name = textFieldName.getText();
                 String password = passwordField.getText();
                 if (name.isEmpty() || password.isEmpty())
                 {
-                    rootSignUpMenu.getChildren().add(labelInvalidInput);
-                    labelInvalidInput.setText("you must Fill both TextFields");
-                    return;
-                }
-                Player player = Player.findPlayer(name);
-                if (player == null)
-                {
-                    rootSignUpMenu.getChildren().remove(labelInvalidInput);
-                    player = new Player(name, password);
-                    try
-                    {
-                        Player.savePlayerInfo(player, true);
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    primaryStage.setScene(sceneLoginMenu);
-                    primaryStage.centerOnScreen();
-                    login(primaryStage);
+                    setInvalidInputText(sceneSignUpMenu, textInvalidInput, "you must Fill both TextFields");
                 }
                 else
                 {
-                    labelInvalidInput.setText("Player exists with this name");
-                    rootSignUpMenu.getChildren().add(labelInvalidInput);
+                    Player player = Player.findPlayer(name);
+                    if (player == null)
+                    {
+                        player = new Player(name, password);
+                        try
+                        {
+                            Player.savePlayerInfo(player, true);
+                        }
+                        catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        primaryStage.setScene(sceneLoginMenu);
+                        primaryStage.centerOnScreen();
+                        login(primaryStage);
+                    }
+                    else
+                    {
+                        setInvalidInputText(sceneSignUpMenu, textInvalidInput, "Player exists with this name");
+                    }
                 }
             }
         });
@@ -101,7 +101,6 @@ public class MenuGraphics
             @Override
             public void handle(MouseEvent event)
             {
-                rootSignUpMenu.getChildren().remove(labelInvalidInput);
                 primaryStage.setScene(sceneLoginMenu);
                 primaryStage.centerOnScreen();
                 login(primaryStage);
@@ -128,33 +127,31 @@ public class MenuGraphics
         PasswordField passwordField = new PasswordField();
         makeNameAndPasswordFields(rootLoginMenu, textFieldName, passwordField);
 
+        Text textInvalidInput = new Text();
+        rootLoginMenu.getChildren().add(textInvalidInput);
+
         Button buttonLogin = new Button("Submit");
-        Label labelInvalidInput = new Label();
-        submitButton(buttonLogin, labelInvalidInput);
+        submitButton(buttonLogin);
         buttonLogin.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
             @Override
             public void handle(MouseEvent event)
             {
-                rootLoginMenu.getChildren().remove(labelInvalidInput);
                 String name = textFieldName.getText();
                 String password = passwordField.getText();
                 if (name.isEmpty() || password.isEmpty())
                 {
-                    labelInvalidInput.setText("you must Fill both TextFields");
-                    rootLoginMenu.getChildren().add(labelInvalidInput);
+                    setInvalidInputText(sceneLoginMenu, textInvalidInput, "you must Fill both TextFields");
                     return;
                 }
                 Player player = Player.findPlayer(name);
                 if (player == null)
                 {
-                    labelInvalidInput.setText("Invalid name or password");
-                    rootLoginMenu.getChildren().add(labelInvalidInput);
+                    setInvalidInputText(sceneLoginMenu, textInvalidInput, "Invalid name or password");
                 }
                 else if (player.getPassword().equals(password))
                 {
                     Player.login(player);
-                    rootSignUpMenu.getChildren().remove(labelInvalidInput);
                     primaryStage.setScene(sceneMainMenu);
                     primaryStage.centerOnScreen();
                     try
@@ -168,8 +165,7 @@ public class MenuGraphics
                 }
                 else
                 {
-                    labelInvalidInput.setText("Password is Wrong.Try again");
-                    rootLoginMenu.getChildren().add(labelInvalidInput);
+                    setInvalidInputText(sceneLoginMenu, textInvalidInput, "Password is Wrong.Try again");
                 }
             }
         });
@@ -183,7 +179,6 @@ public class MenuGraphics
             @Override
             public void handle(MouseEvent event)
             {
-                rootSignUpMenu.getChildren().remove(labelInvalidInput);
                 primaryStage.setScene(sceneSignUpMenu);
                 primaryStage.centerOnScreen();
                 try
@@ -485,16 +480,22 @@ public class MenuGraphics
         root.getChildren().add(hBoxPassword);
     }
 
-    public void submitButton(Button button,Label labelInvalidInput)
+    private void setInvalidInputText(Scene scene, Text textInvalidInput, String text)
+    {
+        textInvalidInput.setText(text);
+        textInvalidInput.setFont(Font.font(15));
+        textInvalidInput.setFill(Color.RED);
+        textInvalidInput.layoutXProperty().bind(scene.widthProperty().subtract(textInvalidInput.prefWidth(-1)).divide(2));
+        textInvalidInput.setY(100);
+    }
+
+    private void submitButton(Button button)
     {
         button.relocate(25, 300);
         button.setFont(Font.font(20));
-        labelInvalidInput.relocate(100, 100);
-        labelInvalidInput.setFont(Font.font(15));
-        labelInvalidInput.setTextFill(Color.RED);
     }
 
-    public void backButton(Stage primaryStage, Group root, int x, int y)
+    private void backButton(Stage primaryStage, Group root, int x, int y)
     {
         Button buttonBackToMainMenu = new Button("Back");
         buttonBackToMainMenu.setFont(Font.font(25));

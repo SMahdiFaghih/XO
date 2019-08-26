@@ -65,7 +65,7 @@ public class Game
         return pausedGames;
     }
 
-    public void insideTheGame()
+    /*public void insideTheGame()
     {
         MatchTable matchTable = this.getMatchTable();
         int row = matchTable.getRow();
@@ -168,7 +168,7 @@ public class Game
             System.out.println("Invalid undo");
         }
         insideTheGame();
-    }
+    }*/
 
     public MatchTable getMatchTable()
     {
