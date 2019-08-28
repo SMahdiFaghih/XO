@@ -199,14 +199,14 @@ public class MenuGraphics
         rootMainMenu.getChildren().clear();
 
         Text textMainMenu = new Text("Welcome to XO");
-        textMainMenu.setFont(Font.font(40));
         textMainMenu.setFill(Color.BLACK);
+        textMainMenu.setFont(Font.font(40));
         textMainMenu.layoutXProperty().bind(sceneMainMenu.widthProperty().subtract(textMainMenu.prefWidth(-1)).divide(2));
         textMainMenu.setY(50);
         rootMainMenu.getChildren().add(textMainMenu);
 
         setMainMenuText(primaryStage, "Play", 80);
-        setMainMenuText(primaryStage, "Set Game Table", 140);
+        setMainMenuText(primaryStage, "Set Match Table", 140);
         setMainMenuText(primaryStage, "Change Name", 200);
         setMainMenuText(primaryStage, "Ranking", 260);
         setMainMenuText(primaryStage, "Logout", 320);
@@ -235,7 +235,7 @@ public class MenuGraphics
                         case "Play":
                             //TODO
                             break;
-                        case "Set Game Table":
+                        case "Set Match Table":
                             primaryStage.setScene(sceneChangeTable);
                             primaryStage.centerOnScreen();
                             changeTable(primaryStage);
@@ -283,8 +283,8 @@ public class MenuGraphics
         textFieldNewName.relocate(80, 130);
         rootChangeName.getChildren().add(textFieldNewName);
 
-        Label labelInputConditionCommand = new Label();
-        labelInputConditionCommand.setFont(Font.font(20));
+        Text textInputConditionCommand = new Text();
+        rootChangeName.getChildren().add(textInputConditionCommand);
 
         Button buttonNewName = new Button("Submit");
         buttonNewName.setFont(Font.font(25));
@@ -294,36 +294,28 @@ public class MenuGraphics
             @Override
             public void handle(MouseEvent event)
             {
-                rootChangeName.getChildren().remove(labelInputConditionCommand);
                 String newName = textFieldNewName.getText();
                 if (newName.isEmpty())
                 {
-                    labelInputConditionCommand.setText("TextField is Empty");
-                    labelInputConditionCommand.setTextFill(Color.RED);
-                    labelInputConditionCommand.relocate(75, 80);
-                    rootChangeName.getChildren().add(labelInputConditionCommand);
+                    setInvalidInputText(sceneChangeName, textInputConditionCommand,"TextField is Empty");
                     return;
                 }
                 Player player = Player.findPlayer(newName);
                 if (player != null)
                 {
-                    labelInputConditionCommand.setText("Player exists with this name");
-                    labelInputConditionCommand.setTextFill(Color.RED);
-                    labelInputConditionCommand.relocate(30, 80);
-                    rootChangeName.getChildren().add(labelInputConditionCommand);
+                    setInvalidInputText(sceneChangeName, textInputConditionCommand,"Player exists with this name");
                     return;
                 }
                 try
                 {
                     Player.getLoggedInPlayer().changeName(newName);
-                } catch (IOException e)
+                }
+                catch (IOException e)
                 {
                     e.printStackTrace();
                 }
-                labelInputConditionCommand.setText("Name changed successfully");
-                labelInputConditionCommand.setTextFill(Color.GREEN);
-                labelInputConditionCommand.relocate(30, 80);
-                rootChangeName.getChildren().add(labelInputConditionCommand);
+                setInvalidInputText(sceneChangeName, textInputConditionCommand,"Name changed successfully");
+                textInputConditionCommand.setFill(Color.GREEN);
             }
         });
         rootChangeName.getChildren().add(buttonNewName);
@@ -365,14 +357,15 @@ public class MenuGraphics
         hBoxColumn.relocate(200, 180);
         rootChangeTable.getChildren().add(hBoxColumn);
 
+        Text inputIsInvalid = new Text();
+        rootChangeTable.getChildren().add(inputIsInvalid);
+
         Button buttonApplyTableChange = new Button("Set new Table");
-        Label inputIsInvalid = new Label();
         buttonApplyTableChange.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
             @Override
             public void handle(MouseEvent event)
             {
-                rootChangeTable.getChildren().remove(inputIsInvalid);
                 try
                 {
                     int numOfRows = Integer.parseInt(textFieldRow.getText());
@@ -380,24 +373,17 @@ public class MenuGraphics
                     if (numOfRows > 3 && numOfRows < 7 && numOfColumns > 3 && numOfColumns < 7)
                     {
                         primaryStage.setScene(sceneMainMenu);
+                        primaryStage.centerOnScreen();
                         mainMenu(primaryStage);
                     }
                     else
                     {
-                        rootChangeTable.getChildren().add(inputIsInvalid);
-                        inputIsInvalid.setText("Numbers must be between 4 and 6");
-                        inputIsInvalid.relocate(50, 250);
-                        inputIsInvalid.setFont(Font.font(18));
-                        inputIsInvalid.setTextFill(Color.RED);
+                        setInvalidInputText(sceneChangeTable, inputIsInvalid, "Numbers must be between 4 and 6");
                     }
                 }
                 catch (NumberFormatException exception)
                 {
-                    rootChangeTable.getChildren().add(inputIsInvalid);
-                    inputIsInvalid.setText("Input in invalid.Please enter numbers");
-                    inputIsInvalid.relocate(50, 250);
-                    inputIsInvalid.setFont(Font.font(18));
-                    inputIsInvalid.setTextFill(Color.RED);
+                    setInvalidInputText(sceneChangeTable, inputIsInvalid, "Input in invalid.Please enter numbers");
                 }
                 catch (Exception e)
                 {
