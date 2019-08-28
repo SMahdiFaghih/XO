@@ -112,7 +112,7 @@ public class MenuGraphics
         primaryStage.centerOnScreen();
     }
 
-    public void login(Stage primaryStage)
+    private void login(Stage primaryStage)
     {
         rootLoginMenu.getChildren().clear();
 
@@ -194,7 +194,7 @@ public class MenuGraphics
         rootLoginMenu.getChildren().add(buttonNeedToSignUp);
     }
 
-    public void mainMenu(Stage primaryStage) throws Exception
+    private void mainMenu(Stage primaryStage)
     {
         rootMainMenu.getChildren().clear();
 
@@ -397,23 +397,40 @@ public class MenuGraphics
         rootChangeTable.getChildren().add(buttonApplyTableChange);
     }
 
-    public void ranking(Stage primaryStage) throws Exception
+    private void ranking(Stage primaryStage)
     {
         rootRanking.getChildren().clear();
 
         Text textTop10 = new Text("Top 10");
         textTop10.setFill(Color.YELLOW);
-        textTop10.setFont(Font.font(30));
+        textTop10.setFont(Font.font(20));
         textTop10.layoutXProperty().bind(sceneRanking.widthProperty().subtract(textTop10.prefWidth(-1)).divide(2));
-        textTop10.setY(30);
+        textTop10.setY(20);
         rootRanking.getChildren().add(textTop10);
+
+        setRankingMenuTexts();
 
         Player.sortPlayers();
         showRankingPlayers();
         backButton(primaryStage, rootRanking, 100, 600);
     }
 
-    public void showRankingPlayers()
+    private void setRankingMenuTexts()
+    {
+        Text textNumber = new Text("NO");
+        textNumber.relocate(20, 30);
+        Text textName = new Text("Name");
+        textName.relocate(45, 30);
+        Text textW = new Text("W");
+        textW.relocate(220, 30);
+        Text textD = new Text("D");
+        textD.relocate(240, 30);
+        Text textL = new Text("L");
+        textL.relocate(260, 30);
+        rootRanking.getChildren().addAll(textNumber, textName, textW, textD, textL);
+    }
+
+    private void showRankingPlayers()
     {
         int counter = 1;
         for (Player player : Player.getPlayers())
@@ -427,9 +444,9 @@ public class MenuGraphics
             labelPlayerName.relocate(25, counter * 50);
             rootRanking.getChildren().add(labelPlayerName);
 
-            Label labelPlayerHighScore = new Label(Integer.toString(player.getNumOfWins()));
+            Label labelPlayerHighScore = new Label(player.getNumOfWins() + "   " + player.getNumOfDraws() + "   " + player.getNumOfLoses());
             labelPlayerHighScore.setFont(Font.font(15));
-            labelPlayerHighScore.relocate(250, counter * 50);
+            labelPlayerHighScore.relocate(220, counter * 50);
             rootRanking.getChildren().add(labelPlayerHighScore);
 
             if (player.equals(Player.getLoggedInPlayer()))
